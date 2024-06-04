@@ -1,0 +1,39 @@
+.shorts-container {
+    display: flex;
+    gap: 12px;
+    margin-inline-start: -53px;
+    height: 110px;
+
+    .short {
+        position: relative;
+        align-self: center;
+        width: 80px;
+        height: 70px;
+
+        & img {
+            border-radius: 50px;
+            width: 57px;
+            height: 57px
+        }
+
+        & .add-short {
+            position: absolute;
+            bottom: 4px;
+            right: 21px;
+            font-size: 23px;
+            padding: 3px;
+            border-radius: 50%;
+            background-color: #fff;
+            color: #0691e8;
+        }
+
+    }
+}
+
+@include for-mobile-layout {
+    .shorts-container {
+        // display: grid;
+        // grid-column: 1 /-1;
+        margin-left: 15px
+    }
+}
