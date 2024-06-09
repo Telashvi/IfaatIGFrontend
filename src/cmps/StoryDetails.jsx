@@ -13,7 +13,6 @@ import { storyService } from "../services/story.service.local.js"
 import { userService } from "../services/user.service.js";
 import { getActionUpdateStory, updateStory, updateStoryAfterCommenting } from "../store/story.actions.js";
 import { storyServiceHttp } from './../services/story.service';
-import img from '../../src/assets/imgs/alexander-andrews-mEdKuPYJe1I-unsplash.jpg'
 
 export function StoryDetails() {
     const [story, setStory] = useState(null)
@@ -23,13 +22,14 @@ export function StoryDetails() {
     const [save, setSave] = useState('')
     const [showPicker, setShowPicker] = useState(false);
     const [isListOpen, setIsListOpen] = useState(false)
-    const imagesLocationStart = '../../'
+
     const user = useSelector((storeState) => storeState.userModule.loggedinUser)
     const params = useParams()
 
     const navigate = useNavigate()
+    let imagesLocationStart = '../../'
 
-    
+
 
 
     useEffect(() => {
@@ -64,16 +64,16 @@ export function StoryDetails() {
         // console.log("The story you want is here:" + await storyServiceHttp.getById(story._id))
         // console.log(story._id)
         // console.log(comment)
-        const newComment = await storyServiceHttp.addStoryMsg(story._id, comment.txt,user)
+        const newComment = await storyServiceHttp.addStoryMsg(story._id, comment.txt, user)
         // console.log(newComment)
-        
+
         story.comments.push(newComment.cmt)
         // await storyServiceHttp.save(story)
         // story.comments.push(comment)
         updateStoryAfterCommenting(story)
         console.log(story)
         setStory(story)
-        
+
         setComment({ txt: '' })
     }
 
@@ -159,7 +159,9 @@ export function StoryDetails() {
                     story.imgUrls.map(img => <img key={story.imgUrls} className="story-img" src={img} />)
                     // </Slider>
                     :  */}
-                <img className="story-img" src={imagesLocationStart+story.imgUrls[0]} alt="story-img" />
+                {story.imgUrls[0].startsWith('http') ?
+                    <img className="story-img" src={story.imgUrls[0]} alt="story-img" /> :
+                    <img className="story-img" src={imagesLocationStart + story.imgUrls[0]} alt="story-img" />}
                 {/* } */}
             </div>
 

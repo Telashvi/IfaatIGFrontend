@@ -7,14 +7,14 @@ import { loadUsers } from "../store/user.actions"
 
 export function SearchModal({ setSearchModal, searchModal, full, setFull }) {
     const [filterBy, setFilterBy] = useState({ txt: '' })
+    const [users, setUsers] = useState([])
     // const elInputRef = useRef(null)
-    const users = useSelector(storeState => storeState.userModule.users)
     const filteredUsers = userService.filterUsers(filterBy, users)
     const navigate = useNavigate()
 
-    useEffect(() => {
+    useEffect( () => {
         // elInputRef.current.focus()
-        loadUsers()
+        awaitUserData()
     }, [])
 
     useEffect(() => {
@@ -22,7 +22,10 @@ export function SearchModal({ setSearchModal, searchModal, full, setFull }) {
         setFilterBy(filterBy)
     }, [filterBy])
 
-
+    async function awaitUserData() {
+        const users = await userService.getUsersForSearch()
+        setUsers(users)
+    }
     function handleChange({ target }) {
         let { value, name: field } = target
         setFilterBy((prevFilter) => {
@@ -44,30 +47,30 @@ export function SearchModal({ setSearchModal, searchModal, full, setFull }) {
 
     if (!users.length) return
     return <div className={!full && searchModal ? "search-modal" : "search-modal hide"}>
-        <section className="car-filter full main-layout">
-            <form onSubmit={onSubmitFilter}>
-                <label htmlFor="vendor">Search</label>
-                <input type="text"
-                    id="vendor"
-                    name="txt"
-                    placeholder="Search"
-                    value={filterBy.txt}
-                    onChange={handleChange}
-                // ref={elInputRef}
-                />
-            </form>
-        </section>
-        <div>
-            {filteredUsers.map(user =>
-                // <Link to={user.username} className="user-container">
-                <div key={user._id} onClick={() => goTo(user.username)} className="user-container">
-                    <img src={user.imgUrl} />
-                    <section>
-                        <span className="username">{user.username}</span>
-                        <span className="fullname">{user.fullname}</span>
-                    </section>
-                </div>)}
+         <section className="car-filter full main-layout">
+             <form onSubmit={onSubmitFilter}>
+                 <label htmlFor="vendor">Search</label>
+                 <input type="text"
+                     id="vendor"
+                     name="txt"
+                     placeholder="Search"
+                     value={filterBy.txt}
+                     onChange={handleChange}
+                 // ref={elInputRef}
+                 />
+             </form>
+         </section>
+         <div>
+             {filteredUsers.map(user =>
+                 // <Link to={user.username} className="user-container">
+                 <div key={user._id} onClick={() => goTo(user.username)} className="user-container">
+                     <img src={user.imgUrl} />
+                     <section>
+                         <span className="username">{user.username}</span>
+                         <span className="fullname">{user.fullname}</span>
+                     </section>
+                 </div>)}
 
-        </div>
-    </div>
+         </div>
+     </div>
 }

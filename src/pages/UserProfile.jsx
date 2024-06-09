@@ -209,12 +209,19 @@ export function UserProfile() {
                   </div>
                 </div>
               </section>
-              <img key={story.imgUrl} src={imagesLocationStart + story.imgUrls[0]} /></div>)}
+              {story.imgUrls[0].startsWith('http') ?
+                <img key={story.imgUrl} src={story.imgUrls[0]} /> :
+                <img key={story.imgUrl} src={imagesLocationStart + story.imgUrls[0]} />}
+            </div>
+            )}
           </section>
           :
           <section className="profile-stories">
-            {savedStories.map(story => <img key={story._id} src={imagesLocationStart + story.imgUrls[0]} />)}
+            {savedStories.map(story => (
+              <img key={story._id} src={story.imgUrls[0].startsWith('http') ? story.imgUrls[0] : imagesLocationStart + story.imgUrls[0]} />
+            ))}
           </section>
+
         }
       </div>
     </div>

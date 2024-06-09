@@ -1,7 +1,7 @@
 import { storageService } from './async-storage.service'
 import { httpService } from './http.service'
 import { socketService } from './socket.service'
-
+import axios from 'axios'
 const STORAGE_KEY_LOGGEDIN_USER = 'loggedinUser'
 const STORAGE_KEY_USERS = 'users'
 
@@ -18,7 +18,8 @@ export const userService = {
     changeScore,
     getEmptyUser,
     getDemoUser,
-    filterUsers
+    filterUsers,
+    getUsersForSearch
 }
 
 window.userService = userService
@@ -40,6 +41,21 @@ async function getUsers() {
 }
 
 
+async function getUsersForSearch() {
+    try {
+        const response = await axios.get('http://localhost:3030/api/user');
+
+        if (response && response.data) {
+            console.log(response.data)
+            return response.data;
+        } else {
+            throw new Error('No data received from the local server');
+        }
+    } catch (error) {
+        console.error('Error fetching users from local server:', error);
+        throw error; 
+    }
+}
 
 async function getById(userId) {
     // const user = await storageService.get('users', userId)
